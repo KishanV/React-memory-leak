@@ -3,7 +3,8 @@ import './index.scss';
 import {Memory} from "../Memory";
 
 interface State {
-    leackMemory: boolean
+    leakMemory: boolean
+    passParent: boolean
     list: {
         id: number
         ref?: Memory
@@ -16,7 +17,8 @@ interface Props {
 export class App extends React.Component<Props, State> {
 
     state: State = {
-        leackMemory: false,
+        passParent: true,
+        leakMemory: false,
         list: []
     };
     count = 0;
@@ -45,14 +47,31 @@ export class App extends React.Component<Props, State> {
                 </div>
                 <div className={'Button'} onClick={event => {
                     this.setState({
-                        leackMemory: !this.state.leackMemory
-                    })
-                }}>Leak Memory : {this.state.leackMemory ? 'True' : 'False'}
+                        list: []
+                    });
+                }}>Clear All
+                </div>
+                <div className={'Button'} style={this.state.passParent ? {backgroundColor: '#dbffdb'} : {backgroundColor: '#ffe8e8'}}
+                     onClick={event => {
+                         this.setState({
+                             passParent: !this.state.passParent
+                         })
+                     }}>Pass Parent & Data : {this.state.passParent ? 'True' : 'False'}
+                </div>
+                <div className={'Button'}
+                     style={this.state.leakMemory ? {backgroundColor: '#dbffdb'} : {backgroundColor: '#ffe8e8'}}
+                     onClick={event => {
+                         this.setState({
+                             leakMemory: !this.state.leakMemory
+                         })
+                     }}>Leak Memory : {this.state.leakMemory ? 'True' : 'False'}
                 </div>
             </div>
             <div className={'Body'}>
                 {this.state.list.map(value => {
-                    return <Memory data={value} app={this} key={value.id}/>
+                    return <Memory data={this.state.passParent ? value : undefined}
+                                   app={this.state.passParent ? this : undefined}
+                                   key={value.id}/>
                 })}
             </div>
         </div>;
