@@ -78,7 +78,7 @@ export class App extends React.Component<Props, State> {
                          this.setState({
                              clearString: !this.state.clearString
                          })
-                     }}>Cleat String On Remove Memory : {this.state.clearString ? 'True' : 'False'}
+                     }}>Clear String On Remove Memory : {this.state.clearString ? 'True' : 'False'}
                 </div>
             </div>
             <div className={'Body'}>
