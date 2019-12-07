@@ -8,10 +8,10 @@ interface State {
 
 interface Props {
     clearString: boolean
+    leakMemory: boolean
     app?: App,
-    data?: {
+    data: {
         id: number
-        ref?: Memory
     }
 }
 
@@ -25,9 +25,13 @@ export class Memory extends React.Component<Props, State> {
         for (let index = 0; index < 100000; index++) {
             this.dummyData.push(index + ' - The quick brown fox jumps over the lazy dog');
         }
-        if (this.props.app && this.props.data && this.props.app.state.leakMemory) {
+        if (this.props.leakMemory) {
             (window as any)['leak_' + this.props.data.id] = this;
         }
+    }
+
+    componentWillUnmount(): void {
+        if (this.props.clearString) this.dummyData = [];
     }
 
     render() {
@@ -35,7 +39,6 @@ export class Memory extends React.Component<Props, State> {
             if (event.button === 2) console.log(this.dummyData);
         }}>
             {this.props.app && <div className={'Close'} onClick={event => {
-                if (this.props.clearString) this.dummyData = [];
                 if (this.props.app) this.props.app.removeMemory(this.props.data);
             }}>
                 <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -23,7 +23,9 @@ export class App extends React.Component<Props, State> {
         leakMemory: false,
         list: []
     };
+
     count = 0;
+    reCount = 0;
 
     constructor(props: any) {
         super(props);
@@ -64,6 +66,7 @@ export class App extends React.Component<Props, State> {
                 <div className={'Button'}
                      style={this.state.leakMemory ? {backgroundColor: '#dbffdb'} : {backgroundColor: '#ffe8e8'}}
                      onClick={event => {
+                         this.reCount++;
                          this.setState({
                              leakMemory: !this.state.leakMemory
                          })
@@ -80,9 +83,10 @@ export class App extends React.Component<Props, State> {
             </div>
             <div className={'Body'}>
                 {this.state.list.map(value => {
-                    return <Memory data={this.state.passParent ? value : undefined}
+                    return <Memory data={value}
+                                   leakMemory={this.state.leakMemory}
                                    app={this.state.passParent ? this : undefined}
-                                   key={value.id}
+                                   key={value.id + '_' + this.reCount}
                                    clearString={this.state.clearString}/>
                 })}
             </div>
