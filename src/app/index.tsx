@@ -4,6 +4,7 @@ import {Memory} from "../Memory";
 
 interface State {
     leakMemory: boolean
+    clearString: boolean
     passParent: boolean
     list: {
         id: number
@@ -18,6 +19,7 @@ export class App extends React.Component<Props, State> {
 
     state: State = {
         passParent: true,
+        clearString: false,
         leakMemory: false,
         list: []
     };
@@ -51,7 +53,8 @@ export class App extends React.Component<Props, State> {
                     });
                 }}>Clear All
                 </div>
-                <div className={'Button'} style={this.state.passParent ? {backgroundColor: '#dbffdb'} : {backgroundColor: '#ffe8e8'}}
+                <div className={'Button'}
+                     style={this.state.passParent ? {backgroundColor: '#dbffdb'} : {backgroundColor: '#ffe8e8'}}
                      onClick={event => {
                          this.setState({
                              passParent: !this.state.passParent
@@ -66,12 +69,21 @@ export class App extends React.Component<Props, State> {
                          })
                      }}>Leak Memory : {this.state.leakMemory ? 'True' : 'False'}
                 </div>
+                <div className={'Button'}
+                     style={this.state.clearString ? {backgroundColor: '#dbffdb'} : {backgroundColor: '#ffe8e8'}}
+                     onClick={event => {
+                         this.setState({
+                             clearString: !this.state.clearString
+                         })
+                     }}>Cleat String On Remove Memory : {this.state.clearString ? 'True' : 'False'}
+                </div>
             </div>
             <div className={'Body'}>
                 {this.state.list.map(value => {
                     return <Memory data={this.state.passParent ? value : undefined}
                                    app={this.state.passParent ? this : undefined}
-                                   key={value.id}/>
+                                   key={value.id}
+                                   clearString={this.state.clearString}/>
                 })}
             </div>
         </div>;

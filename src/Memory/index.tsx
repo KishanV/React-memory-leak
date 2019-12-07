@@ -7,6 +7,7 @@ interface State {
 }
 
 interface Props {
+    clearString: boolean
     app?: App,
     data?: {
         id: number
@@ -33,7 +34,8 @@ export class Memory extends React.Component<Props, State> {
         return <div className={'Memory'} onClick={event => {
             if (event.button === 2) console.log(this.dummyData);
         }}>
-            <div className={'Close'} onClick={event => {
+            {this.props.app && <div className={'Close'} onClick={event => {
+                if (this.props.clearString) this.dummyData = [];
                 if (this.props.app) this.props.app.removeMemory(this.props.data);
             }}>
                 <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,8 +43,8 @@ export class Memory extends React.Component<Props, State> {
                     <rect x="1.2218" y="8.74268" width="1" height="11" transform="rotate(-135 1.2218 8.74268)"
                           fill="#0386C8"/>
                 </svg>
-            </div>
-            <div className={'Id'}>{this.props.data && this.props.data.id}</div>
+            </div>}
+            <div className={'Id'}>Mem-{this.props.data ? this.props.data.id : 'No-id'}</div>
         </div>;
     }
 }
